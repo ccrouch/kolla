@@ -6,6 +6,9 @@ set -e
 : ${ADMIN_TENANT_NAME:=admin}
 
 . /opt/kolla/kolla-common.sh
+: ${KEYSTONE_ADMIN_SERVICE_HOST:=$PUBLIC_IP}
+: ${KEYSTONE_PUBLIC_SERVICE_HOST:=$PUBLIC_IP}
+
 check_for_db
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_DB_PASSWORD \
                     KEYSTONE_ADMIN_PASSWORD ADMIN_TENANT_NAME \
