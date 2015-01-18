@@ -4,6 +4,7 @@ set -e
 
 . /opt/kolla/kolla-common.sh
 . /opt/kolla/config-glance.sh
+: ${GLANCE_API_SERVICE_HOST:=$PUBLIC_IP}
 
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     GLANCE_KEYSTONE_USER GLANCE_KEYSTONE_PASSWORD \
