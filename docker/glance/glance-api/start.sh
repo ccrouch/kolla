@@ -26,4 +26,9 @@ crux endpoint-create --remove-all \
     -P "http://${PUBLIC_IP}:9292" \
     -A "http://${GLANCE_API_SERVICE_HOST}:9292"
 
+crudini --set /etc/glance/glance-api.conf \
+    DEFAULT \
+    registry_host \
+    "${GLANCE_REGISTRY_SERVICE_HOST}"
+
 exec /usr/bin/glance-api
