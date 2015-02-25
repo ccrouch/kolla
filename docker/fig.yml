@@ -61,6 +61,7 @@ ceilapi:
    - RABBITMQ_PASS=guest
    - DB_ROOT_PASSWORD=admin
    - KEYSTONE_ADMIN_TOKEN=secret
+   - KEYSTONE_ADMIN_PASSWORD=kolla
    - CEILOMETER_DB_USER=ceilometer
    - CEILOMETER_DB_PASSWORD=ceildbpwd
    - CEILOMETER_DB_NAME=ceilometer
@@ -84,6 +85,7 @@ ceilnotif:
    - mariadb
   environment:
    - RABBITMQ_PASS=guest
+   # why is this needed, I thought notif. only sent msgs?
    - CEILOMETER_DB_PASSWORD=ceildbpwd
    # why are these needed?
    - KEYSTONE_ADMIN_TOKEN=secret
