@@ -27,6 +27,17 @@ crux endpoint-create --remove-all \
     -P "http://${PUBLIC_IP}:9292" \
     -A "http://${GLANCE_API_SERVICE_HOST}:9292"
 
+# turn on notification sending by glance
+crudini --set /etc/glance/glance-api.conf \
+    DEFAULT \
+    notification_driver \
+    "messaging"
+
+crudini --set /etc/glance/glance-api.conf \
+    DEFAULT \
+    rabbit_host \
+    "${RABBITMQ_SERVICE_HOST}"
+
 crudini --set /etc/glance/glance-api.conf \
     DEFAULT \
     registry_host \
