@@ -37,18 +37,21 @@ crux user-create -n ${CEILOMETER_KEYSTONE_USER} \
     -t ${ADMIN_TENANT_NAME} \
     -r admin
 
-crux service-create -n ${CEILOMETER_KEYSTONE_USER} -t metering \
-    -d "Ceilometer Telemetry Service"
+# Other than the description field, this service-create is already handled by
+# the following endpoint-create command
+#crux service-create -n ${CEILOMETER_KEYSTONE_USER} -t metering \
+#    -d "Ceilometer Telemetry Service"
 
-crux endpoint-create i--remove-all -n ${CEILOMETER_KEYSTONE_USER} -t metering \
+crux endpoint-create --remove-all -n ${CEILOMETER_KEYSTONE_USER} -t metering \
     -I "${KEYSTONE_AUTH_PROTOCOL}://${CEILOMETER_API_SERVICE_HOST}:8777" \
     -P "${KEYSTONE_AUTH_PROTOCOL}://${PUBLIC_IP}:8777" \
     -A "${KEYSTONE_AUTH_PROTOCOL}://${CEILOMETER_API_SERVICE_HOST}:8777"
 
 cfg=/etc/ceilometer/ceilometer.conf
 crudini --set $cfg \
-    DEFAULT connection
+    database connection \
     "mysql://${CEILOMETER_DB_USER}:${CEILOMETER_DB_PASSWORD}@${MARIADB_SERVICE_HOST}/${CEILOMETER_DB_NAME}"
 
+ceilometer-dbsync
 
 exec /usr/bin/ceilometer-api
