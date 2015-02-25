@@ -45,6 +45,14 @@ crudini --set $cfg \
     keystone_authtoken \
     admin_password \
     ${CEILOMETER_ADMIN_PASSWORD}
+crudini --set $cfg \
+    keystone_authtoken \
+    auth_host \
+    "${KEYSTONE_PUBLIC_SERVICE_HOST}"
+crudini --set $cfg \
+    keystone_authtoken \
+    auth_protocol \
+    "http"
 
 crudini --set $cfg \
     service_credentials \
@@ -53,17 +61,17 @@ crudini --set $cfg \
 crudini --set $cfg \
     service_credentials \
     os_username \
-    ceilometer
+    "${CEILOMETER_KEYSTONE_USER}"
 crudini --set $cfg \
     service_credentials \
     os_tenant_name \
-    service
+    "${ADMIN_TENANT_NAME}"
 crudini --set $cfg \
     service_credentials \
     os_password \
     ${CEILOMETER_ADMIN_PASSWORD}
 
 crudini --set $cfg \
-    publisher
-    metering_secret
+    publisher \
+    metering_secret \
     ${METERING_SECRET}
