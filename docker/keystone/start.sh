@@ -9,6 +9,8 @@ set -e
 : ${KEYSTONE_ADMIN_SERVICE_HOST:=$PUBLIC_IP}
 : ${KEYSTONE_PUBLIC_SERVICE_HOST:=$PUBLIC_IP}
 
+# lets wait for the DB to be available
+./opt/kolla/wait_for 25 1 mysql -h ${MARIADB_SERVICE_HOST} -u root -p"${DB_ROOT_PASSWORD}" -e 'status;'
 check_for_db
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_DB_PASSWORD \
                     KEYSTONE_ADMIN_PASSWORD ADMIN_TENANT_NAME \
