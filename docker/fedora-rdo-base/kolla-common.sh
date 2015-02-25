@@ -1,5 +1,7 @@
 #!/bin/bash
+set -x
 
+printenv | sort
 . /opt/kolla/service_hosts.sh
 
 # Set some generally useful defaults.
