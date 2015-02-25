@@ -3,6 +3,9 @@ set -e
 
 : ${MYSQL_ROOT_PASSWORD:=$DB_ROOT_PASSWORD}
 
+# wait until its our turn to start
+#SUCCESSFUL_MATCH_OUTPUT=[[:digit:]]{2}-mariadb.run /opt/kolla/wait_for 60 1 "ls /tmp/gate/*.run"
+
 if [ -z "$(ls -A /var/lib/mysql)" -a "${1%_safe}" = 'mysqld' ]; then
 	PATH=/usr/libexec:$PATH
 	export PATH
@@ -39,9 +42,14 @@ if [ -z "$(ls -A /var/lib/mysql)" -a "${1%_safe}" = 'mysqld' ]; then
 	fi
 	
 	echo 'FLUSH PRIVILEGES ;' >> "$TEMP_FILE"
-	
+
 	set -- "$@" --init-file="$TEMP_FILE"
 fi
 
 chown -R mysql:mysql /var/lib/mysql
+
+# done init, about to run CMD, so move gate
+# unfortunately syntax for rename command is different on Fedora and ubuntu
+#rename .run .ran /tmp/gate/*-mariadb.run
+
 exec "$@"
