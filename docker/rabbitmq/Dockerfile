@@ -4,6 +4,7 @@ MAINTAINER Kolla Project (https://launchpad.net/kolla)
 RUN yum -y install rabbitmq-server; yum clean all
 ADD rabbitmq.config /etc/rabbitmq/
 ADD rabbitmq-env.conf /etc/rabbitmq/
+ADD enabled_plugins /etc/rabbitmq/
 
 EXPOSE 5672 
 
