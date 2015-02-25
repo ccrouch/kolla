@@ -8,6 +8,13 @@ set -e
 
 check_required_vars CEILOMETER_DB_USER CEILOMETER_DB_NAME KEYSTONE_AUTH_PROTOCOL CEILOMETER_KEYSTONE_USER CEILOMETER_ADMIN_PASSWORD ADMIN_TENANT_NAME METERING_SECRET CEILOMETER_API_SERVICE_HOST PUBLIC_IP
 
+# this should behave similarly to glance-api/start.sh i.e. wait for this command
+# to return successfully so we know that the admin tenant and role have already
+# been created
+/opt/kolla/wait_for 30 1 keystone \
+                    --os-auth-url=http://${KEYSTONE_PUBLIC_SERVICE_HOST}:35357/v2.0 \
+                    --os-username=admin --os-tenant-name=${ADMIN_TENANT_NAME} \
+                    --os-password=${KEYSTONE_ADMIN_PASSWORD} endpoint-list
 check_for_keystone
 check_for_db
 
