@@ -35,6 +35,10 @@ crudini --set /etc/keystone/keystone.conf \
     DEFAULT \
     log_file \
     ""
+crudini --set /etc/keystone/keystone.conf \
+    DEFAULT \
+    debug \
+    "True"
 crudini --del /etc/keystone/keystone.conf \
     DEFAULT \
     log_dir
