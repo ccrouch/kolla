@@ -54,4 +54,17 @@ crudini --set $cfg \
 
 ceilometer-dbsync
 
+# try to get logging to come out of stdout, so far no luck
+crudini --set $cfg \
+    DEFAULT debug \
+    "True"
+
+crudini --set $cfg \
+    DEFAULT log_file \
+    ""
+
+crudini --set $cfg \
+    DEFAULT use_stderr \
+    "False"
+
 exec /usr/bin/ceilometer-api
