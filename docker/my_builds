@@ -1,0 +1,12 @@
+# while read -r line; do command "$line" --release; done < my_builds
+./fedora-rdo-base/build
+./mariadb/build
+./rabbitmq/build
+./keystone/build
+./glance/glance-base/build
+./glance/glance-api/build
+./glance/glance-registry/build
+./ceilometer/ceilometer-base/build
+./ceilometer/ceilometer-api/build
+./ceilometer/ceilometer-collector/build
+./ceilometer/ceilometer-notification/build
