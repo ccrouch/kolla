@@ -10,4 +10,7 @@ VOLUME /var/log/mariadb
 EXPOSE 3306
 
 ENTRYPOINT ["/entrypoint.sh"]
+# BUG msqld_safe eats signals so this will not shutdown cleanly
+# but can't just blindly use mysqld since it wont start up when being
+# run as root. Should look at how official mysql docker image does it
 CMD ["mysqld_safe"]
