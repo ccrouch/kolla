@@ -54,6 +54,8 @@ EOF
 /usr/bin/keystone-manage db_sync
 /usr/bin/keystone-manage pki_setup --keystone-user keystone --keystone-group keystone
 
+trap 'kill -TERM $PID; wait $PID' TERM
+echo "Running keystone service."
 /usr/bin/keystone-all &
 PID=$!
 
@@ -75,12 +77,16 @@ crux endpoint-create --remove-all \
     -A "http://${KEYSTONE_ADMIN_SERVICE_HOST}:35357/v2.0" \
     -P "http://${PUBLIC_IP}:5000/v2.0"
 
-kill -TERM $PID
-
-while curl -o /dev/null -s --fail ${SERVICE_ENDPOINT}; do
-    echo "waiting for keystone @ ${SERVICE_ENDPOINT} to exit"
-    sleep 1;
-done
-
-echo "Running keystone service."
-exec /usr/bin/keystone-all
+# BUG
+# I can find no reason why the keystone-all prcoess was being killed here, other
+# than the desire to make it PID1. 
+# Here is the original commit:
+# https://github.com/stackforge/kolla/commit/2a27886421570fd78fcc3f847cb640464b8377ef
+# Killing the keystone-all process here introduces a bug whereby a service that 
+# depends on keystone e.g. glance-api, can wait for keystone to be ready, which it will
+# be as soon as the endpoint is created, but then try to call the service and find 
+# that its down and in the middle of this kill/start process.
+# So instead of doing kill/start we just setup the trap above and the wait below
+# so that signals sent to this script will be passed to the original 
+# keystone-all process appropriately
+wait $PID
