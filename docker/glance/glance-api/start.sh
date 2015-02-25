@@ -6,6 +6,7 @@ set -e
 . /opt/kolla/config-glance.sh
 : ${GLANCE_API_SERVICE_HOST:=$PUBLIC_IP}
 
+set -x
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     GLANCE_KEYSTONE_USER GLANCE_KEYSTONE_PASSWORD \
                     ADMIN_TENANT_NAME GLANCE_API_SERVICE_HOST \
@@ -42,5 +43,10 @@ crudini --set /etc/glance/glance-api.conf \
     DEFAULT \
     registry_host \
     "${GLANCE_REGISTRY_SERVICE_HOST}"
+
+crudini --set /etc/glance/glance-api.conf \
+    DEFAULT \
+    debug \
+    "True"
 
 exec /usr/bin/glance-api
