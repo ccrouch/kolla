@@ -29,6 +29,7 @@ crudini --set $cfg \
 crudini --set $cfg \
     DEFAULT rabbit_password ${RABBITMQ_PASS}
 
+# TODO not every service needs access to keystone e.g. notification agent
 crudini --set $cfg \
     keystone_authtoken \
     auth_uri \
@@ -45,6 +46,8 @@ crudini --set $cfg \
     keystone_authtoken \
     admin_password \
     ${CEILOMETER_ADMIN_PASSWORD}
+# TODO why are these two need if auth_uri is already set, and if they are 
+# needed why is auth_port not also needed?
 crudini --set $cfg \
     keystone_authtoken \
     auth_host \
