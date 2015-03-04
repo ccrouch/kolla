@@ -60,7 +60,7 @@ crudini --set $cfg \
 crudini --set $cfg \
     service_credentials \
     os_auth_url \
-    ${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_PUBLIC_SERVICE_HOST}:5000/
+    ${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_PUBLIC_SERVICE_HOST}:${KEYSTONE_PUBLIC_SERVICE_PORT}/v2.0
 crudini --set $cfg \
     service_credentials \
     os_username \
