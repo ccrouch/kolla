@@ -8,7 +8,7 @@
 
 #BUG
 # I dont think we should have any entry here that can be retrieved
-# from keystone
+# from keystone instead
 : ${BARBICAN_ADMIN_SERVICE_HOST:=$BARBICAN_ADMIN_PORT_9312_TCP_ADDR}
 : ${BARBICAN_ADMIN_SERVICE_PORT:=9312}
 : ${BARBICAN_PUBLIC_SERVICE_HOST:=$BARBICAN_PUBLIC_PORT_9311_TCP_ADDR}
@@ -19,12 +19,8 @@
 # don't think we need glance api
 : ${GLANCE_API_SERVICE_HOST:=$GLANCE_API_PORT_9292_TCP_ADDR}
 : ${GLANCE_API_SERVICE_PORT:=9292}
-# until https://github.com/docker/fig/issues/869 is implemented fig can't
-# produce container names like GLANCE_REGISTRY, so we are stuck with
-# having to use something like GLANCEREG which means we need to update
-# the corresponding *_PORT_*_TCP_ADDR env vars here
+# glance reg is needed, since glance api v1 needs it
 : ${GLANCE_REGISTRY_SERVICE_HOST:=$GLANCE_REGISTRY_PORT_9191_TCP_ADDR}
-#: ${GLANCE_REGISTRY_SERVICE_HOST:=$GLANCEREG_PORT_9191_TCP_ADDR}
 : ${GLANCE_REGISTRY_SERVICE_PORT:=9191}
 : ${HEAT_API_SERVICE_HOST:=$HEAT_API_PORT_8004_TCP_ADDR}
 : ${HEAT_API_SERVICE_PORT:=8004}
