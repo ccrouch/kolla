@@ -10,3 +10,4 @@
 ./ceilometer/ceilometer-api/build
 ./ceilometer/ceilometer-collector/build
 ./ceilometer/ceilometer-notification/build
+./ceilometer/ceilometer-central/build
