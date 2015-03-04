@@ -12,8 +12,9 @@ check_required_vars CEILOMETER_DB_USER CEILOMETER_DB_NAME KEYSTONE_AUTH_PROTOCOL
 # to return successfully so we know that the admin tenant and role have already
 # been created
 /opt/kolla/wait_for 30 1 keystone \
-                    --os-auth-url=http://${KEYSTONE_PUBLIC_SERVICE_HOST}:35357/v2.0 \
-                    --os-username=admin --os-tenant-name=${ADMIN_TENANT_NAME} \
+                    --os-auth-url=${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_ADMIN_SERVICE_HOST}:${KEYSTONE_ADMIN_SERVICE_PORT}/v2.0 \
+                    --os-username=admin \
+                    --os-tenant-name=${ADMIN_TENANT_NAME} \
                     --os-password=${KEYSTONE_ADMIN_PASSWORD} endpoint-list
 check_for_keystone
 check_for_db
@@ -42,6 +43,7 @@ crux user-create -n ${CEILOMETER_KEYSTONE_USER} \
 #crux service-create -n ${CEILOMETER_KEYSTONE_USER} -t metering \
 #    -d "Ceilometer Telemetry Service"
 
+# TODO what does KEYSTONE_AUTH_PROTOCOL have to do with Ceil endpoints?
 crux endpoint-create --remove-all -n ${CEILOMETER_KEYSTONE_USER} -t metering \
     -I "${KEYSTONE_AUTH_PROTOCOL}://${CEILOMETER_API_SERVICE_HOST}:8777" \
     -P "${KEYSTONE_AUTH_PROTOCOL}://${PUBLIC_IP}:8777" \
