@@ -29,51 +29,6 @@ crudini --set $cfg \
 crudini --set $cfg \
     DEFAULT rabbit_password ${RABBITMQ_PASS}
 
-# TODO not every service needs access to keystone e.g. notification agent
-crudini --set $cfg \
-    keystone_authtoken \
-    auth_uri \
-    "http://${KEYSTONE_PUBLIC_SERVICE_HOST}:5000/"
-crudini --set $cfg \
-    keystone_authtoken \
-    admin_tenant_name \
-    "${ADMIN_TENANT_NAME}"
-crudini --set $cfg \
-    keystone_authtoken \
-    admin_user \
-    "${CEILOMETER_KEYSTONE_USER}"
-crudini --set $cfg \
-    keystone_authtoken \
-    admin_password \
-    ${CEILOMETER_ADMIN_PASSWORD}
-# TODO why are these two need if auth_uri is already set, and if they are 
-# needed why is auth_port not also needed?
-crudini --set $cfg \
-    keystone_authtoken \
-    auth_host \
-    "${KEYSTONE_PUBLIC_SERVICE_HOST}"
-crudini --set $cfg \
-    keystone_authtoken \
-    auth_protocol \
-    "http"
-
-crudini --set $cfg \
-    service_credentials \
-    os_auth_url \
-    ${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_PUBLIC_SERVICE_HOST}:${KEYSTONE_PUBLIC_SERVICE_PORT}/v2.0
-crudini --set $cfg \
-    service_credentials \
-    os_username \
-    "${CEILOMETER_KEYSTONE_USER}"
-crudini --set $cfg \
-    service_credentials \
-    os_tenant_name \
-    "${ADMIN_TENANT_NAME}"
-crudini --set $cfg \
-    service_credentials \
-    os_password \
-    ${CEILOMETER_ADMIN_PASSWORD}
-
 crudini --set $cfg \
     publisher \
     metering_secret \

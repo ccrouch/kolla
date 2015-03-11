@@ -53,6 +53,37 @@ cfg=/etc/ceilometer/ceilometer.conf
 crudini --set $cfg \
     database connection \
     "mysql://${CEILOMETER_DB_USER}:${CEILOMETER_DB_PASSWORD}@${MARIADB_SERVICE_HOST}/${CEILOMETER_DB_NAME}"
+# TODO not every service needs access to keystone e.g. notification agent
+crudini --set $cfg \
+    keystone_authtoken \
+    auth_uri \
+    "http://${KEYSTONE_PUBLIC_SERVICE_HOST}:5000/"
+crudini --set $cfg \
+    keystone_authtoken \
+    admin_tenant_name \
+    "${ADMIN_TENANT_NAME}"
+crudini --set $cfg \
+    keystone_authtoken \
+    admin_user \
+    "${CEILOMETER_KEYSTONE_USER}"
+crudini --set $cfg \
+    keystone_authtoken \
+    admin_password \
+    ${CEILOMETER_ADMIN_PASSWORD}
+# TODO why are these two need if auth_uri is already set, and if they are 
+# needed why is auth_port not also needed?
+crudini --set $cfg \
+    keystone_authtoken \
+    auth_host \
+    "${KEYSTONE_PUBLIC_SERVICE_HOST}"
+crudini --set $cfg \
+    keystone_authtoken \
+    auth_protocol \
+    "http"
+
+
+
+
 
 ceilometer-dbsync
 
