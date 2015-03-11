@@ -102,6 +102,8 @@ ceilcentral:
    # Needed to lookup the location of the services being polled
    - keystone
    # Needed to poll the actual services being monitored, just glance now
+   # TODO is this really needed, what does this actually do since ceilcentral
+   # is not relying on any env vars which get set? 
    - glanceapi
   environment:
    - RABBITMQ_PASS=guest
