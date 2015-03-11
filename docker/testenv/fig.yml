@@ -1,0 +1,9 @@
+testenv:
+  image: kollaglue/fedora-rdo-testenv
+  external_links:
+   # Use maria to store all identity info
+   - docker_keystone_1:keystone
+  environment:
+   - KEYSTONE_ADMIN_PASSWORD=kolla2
+  command:
+   - bash
