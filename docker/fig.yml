@@ -105,6 +105,9 @@ ceilcentral:
    # TODO is this really needed, what does this actually do since ceilcentral
    # is not relying on any env vars which get set? 
    - glanceapi
+  # if you are running dnsmasq on the host you can use the setting below to
+  # allow the container to use the host for DNS resolution
+  #dns: 172.17.42.1
   environment:
    - RABBITMQ_PASS=guest
    # TODO remove check for this 
