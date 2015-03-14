@@ -27,6 +27,8 @@ crudini --set /etc/heat/heat.conf DEFAULT log_file \
     ""
 crudini --set /etc/heat/heat.conf DEFAULT use_stderr \
     true
+crudini --set /etc/heat/heat.conf DEFAULT debug \
+    true
 crudini --set /etc/heat/heat.conf DEFAULT rpc_backend \
     heat.openstack.common.rpc.impl_kombu
 crudini --set /etc/heat/heat.conf DEFAULT rabbit_host \
