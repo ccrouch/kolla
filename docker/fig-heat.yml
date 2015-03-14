@@ -1,0 +1,87 @@
+mariadb:
+  image: kollaglue/fedora-rdo-mariadb
+  environment:
+   - DB_ROOT_PASSWORD=admin
+keystone:
+  image: kollaglue/fedora-rdo-keystone
+  links:
+   # Use maria to store all identity info
+   - mariadb
+  environment:
+   - DB_ROOT_PASSWORD=admin
+   # Needed for keystone initialization
+   - KEYSTONE_ADMIN_TOKEN=secret
+   - KEYSTONE_ADMIN_PASSWORD=kolla
+   - KEYSTONE_DB_PASSWORD=keystonepwd
+glancereg:
+  image: kollaglue/fedora-rdo-glance-registry
+  links:
+   - mariadb
+  environment:
+   - DB_ROOT_PASSWORD=admin
+   - GLANCE_DB_PASSWORD=glancedbpwd
+   # TODO why is this needed if the keystone image isn't even linked
+   - GLANCE_KEYSTONE_PASSWORD=glancekeypwd
+glanceapi:
+  image: kollaglue/fedora-rdo-glance-api
+  links:
+   - keystone
+   # Until https://github.com/docker/compose/issues/869 is implemented fig 
+   # can't produce container names like glance_registry, so we are stuck with
+   # glancereg and so have to use an alias in the links here so that
+   # ultimately the *_PORT_*_TCP_ADDR env vars, e.g. 
+   # GLANCE_REGISTRY_PORT_9191_TCP_ADDR, come out in a way that is usable by
+   # fedora-rdo-base/service_hosts.sh
+   - glancereg:glance_registry 
+   # Only needed for sending notifications, which ceil. then picks up
+   - rabbitmq
+  environment:
+   # Needed to allow creation of keystone user for glance
+   # TODO I think we only need one of these
+   - KEYSTONE_ADMIN_TOKEN=secret
+   - KEYSTONE_ADMIN_PASSWORD=kolla
+   # TODO not sure the DB password is actually needed since
+   # we're only using v1 of the glance api right now.
+   # Could try setting this to a bogus value
+   - GLANCE_DB_PASSWORD=glancedbpwd
+   # Needed for glance keystone user
+   - GLANCE_KEYSTONE_PASSWORD=glancekeypwd
+rabbitmq:
+  image: kollaglue/fedora-rdo-rabbitmq
+  environment:
+   - RABBITMQ_PASS=guest
+  ports:
+   # we've enabled the rabbitmq-management plugin by turning on tracing, 
+   # so might as well expose the HTTP interface on the container and host
+   - "15672:15672"
+heatengine:
+  image: kollaglue/fedora-rdo-heat-engine
+  links:
+   - mariadb
+   # TODO clarify why this is needed
+   - rabbitmq
+   # TODO I dont think this should be needed
+   - keystone
+  environment:
+   - DB_ROOT_PASSWORD=admin
+   - HEAT_DB_PASSWORD=heatdbpwd
+   # TODO I dont think this should be required
+   - HEAT_KEYSTONE_PASSWORD=heatkeypwd
+heatapi:
+  image: kollaglue/fedora-rdo-heat-api
+  links:
+   - keystone
+   # https://github.com/docker/compose/issues/869
+   #- heateng:heat_engine
+   # TODO clarify why this is needed
+   - rabbitmq
+   - mariadb
+  environment:
+   # Needed to allow creation of keystone user for heat
+   # TODO I think we only need one of these
+   - KEYSTONE_ADMIN_TOKEN=secret
+   #- KEYSTONE_ADMIN_PASSWORD=kolla
+   - HEAT_DB_PASSWORD=heatdbpwd
+   # Needed when creating heat keystone user
+   - HEAT_KEYSTONE_PASSWORD=heatkeypwd
+
