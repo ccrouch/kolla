@@ -4,6 +4,8 @@ set -e
 . /opt/kolla/kolla-common.sh
 . /opt/kolla/config-heat.sh
 
+: ${HEAT_API_SERVICE_HOST:=$PUBLIC_IP}
+
 check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     HEAT_KEYSTONE_USER HEAT_KEYSTONE_PASSWORD \
                     KEYSTONE_AUTH_PROTOCOL ADMIN_TENANT_NAME \
