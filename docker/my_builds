@@ -11,3 +11,6 @@
 ./ceilometer/ceilometer-collector/build
 ./ceilometer/ceilometer-notification/build
 ./ceilometer/ceilometer-central/build
+./heat/heat-base/build
+./heat/heat-engine/build
+./heat/heat-api/build
