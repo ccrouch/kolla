@@ -11,6 +11,10 @@ check_required_vars KEYSTONE_ADMIN_TOKEN KEYSTONE_ADMIN_SERVICE_HOST \
                     KEYSTONE_AUTH_PROTOCOL ADMIN_TENANT_NAME \
                     HEAT_API_SERVICE_HOST PUBLIC_IP
 
+/opt/kolla/wait_for 30 1 keystone \
+                    --os-auth-url=http://${KEYSTONE_ADMIN_SERVICE_HOST}:35357/v2.0 \
+                    --os-username=admin --os-tenant-name=${ADMIN_TENANT_NAME} \
+                    --os-password=${KEYSTONE_ADMIN_PASSWORD} endpoint-list
 check_for_keystone
 
 export SERVICE_TOKEN="${KEYSTONE_ADMIN_TOKEN}"
